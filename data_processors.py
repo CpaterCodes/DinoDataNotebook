@@ -13,13 +13,13 @@ def convert_length(length: str) -> float:
         return 0.0
 
 
-def with_periods(df: DataFrame) -> DataFrame:
-    df[['epoch', 'period', 'mya_lower_bound', 'mya_upper_bound']] = df['period'].str.extract(
-        '(\w+)\s(\w+)\s(\d+)-(\d+)\smillion\syears\sago', expand=True
+def with_epochs(df: DataFrame) -> DataFrame:
+    df[['epoch', 'mya_lower', 'mya_upper']] = df['period'].str.extract(
+        r'(\w+\s\w+)\s(\d+)-(\d+)\smillion\syears\sago', expand=True
     )
-    df['mya_lower_bound'] = df['mya_lower_bound'].apply(convert_mya)
-    df['mya_upper_bound'] = df['mya_upper_bound'].apply(convert_mya)
-    return df
+    df['mya_lower'] = df['mya_lower'].apply(convert_mya)
+    df['mya_upper'] = df['mya_upper'].apply(convert_mya)
+    return df.drop(columns=['period'])
 
 
 def convert_mya(mya: str) -> int:
