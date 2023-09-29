@@ -46,8 +46,11 @@ def test_null_handling_for_time_periods():
     )
     df_with_epoch_nulls = with_epochs(df_with_period_nulls)
     
-    epochs, uppers, lowers = [list(df_with_epoch_nulls[col]) for col in ['epoch', 'mya_upper', 'mya_lower']]
-    assert(epochs == ["Mid Jurassic", "Early Cretaceous", "", ""])
+    epochs, uppers, lowers = [
+        list(df_with_epoch_nulls[col]) 
+        for col in ['epoch', 'mya_upper', 'mya_lower']
+    ]
+    assert(epochs == ["Mid Jurassic", "Early Cretaceous", "N/A", "N/A"])
     assert(uppers == [170, 0, 0, 0])
     assert(lowers == [170, 0, 0, 0])
     
