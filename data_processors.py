@@ -23,10 +23,6 @@ def with_epochs(df: DataFrame) -> DataFrame:
     return df.drop(columns=['period'])
 
 
-def with_epoch_nums(df: DataFrame, epochs: list[str]) -> DataFrame:
-    return df
-
-
 EPOCH_SET = [
     f"{lateness} {period}"
     for lateness in ["Early", "Mid", "Late"]

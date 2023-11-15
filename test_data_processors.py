@@ -1,4 +1,4 @@
-from data_processors import with_lengths, with_epochs, with_epoch_nums
+from data_processors import with_lengths, with_epochs
 from pandas import DataFrame
 
 
@@ -53,18 +53,3 @@ def test_null_handling_for_time_periods():
     assert(epochs == ["Mid Jurassic", "Early Cretaceous", "N/A", "N/A"])
     assert(uppers == [170, 0, 0, 0])
     assert(lowers == [170, 0, 0, 0])
-
-def test_epoch_labels():
-    df_with_epochs = DataFrame(
-        {"epoch": [
-            "Miocene",
-            "Pliocene",
-            "Pleistocene"
-        ]}
-    )
-    epochs = ['Miocene', 'Pliocene', 'Pleistocene']
-    df_with_epoch_nums = with_epoch_nums(df_with_epochs, epochs)
-    miocene, pliocene, pleistocene = list(df_with_epoch_nums['epoch_num'])
-    assert(miocene == 0)
-    assert(pliocene == 1)
-    assert(pleistocene == 2)
