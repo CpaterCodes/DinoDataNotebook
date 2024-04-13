@@ -1,6 +1,5 @@
-from data_processors import with_lengths, with_epochs
+from data_processors import with_lengths, with_epochs, taxonomy_lists
 from pandas import DataFrame
-
 
 
 def test_lengths_become_floats():
@@ -31,9 +30,14 @@ def test_time_periods_converted():
     )
     df_with_epochs = with_epochs(df_with_periods)
     
-    assert(list(df_with_epochs['epoch']) == ['Mid Jurassic', 'Late Cretaceous'])
+    assert(
+        list(
+            df_with_epochs['epoch']
+        ) == ['Mid Jurassic', 'Late Cretaceous']
+    )
     assert(list(df_with_epochs['mya_upper']) == [180, 66])
     assert(list(df_with_epochs['mya_lower']) == [190, 70])
+
 
 def test_null_handling_for_time_periods():
     df_with_period_nulls = DataFrame(
@@ -53,3 +57,19 @@ def test_null_handling_for_time_periods():
     assert(epochs == ["Mid Jurassic", "Early Cretaceous", "N/A", "N/A"])
     assert(uppers == [170, 0, 0, 0])
     assert(lowers == [170, 0, 0, 0])
+
+
+def test_extract_cladelists():
+    df_with_taxonomies = DataFrame({
+        "taxonomy": [
+            "Dinosauria Saurischia Sauropodomorpha Prosauropoda",
+            "Dinosauria Saurischia Theropoda Neotheropoda",
+            "Dinosauria Ornithischia Genasauria Thyreophora"
+        ]
+    })
+    assert taxonomy_lists(df_with_taxonomies) == [
+        ["Dinosauria", "Saurischia", "Sauropodomorpha", "Prosauropoda"],
+        ["Dinosauria", "Saurischia", "Theropoda", "Neotheropoda"],
+        ["Dinosauria", "Ornithischia", "Genasauria", "Thyreophora"]
+    ]
+    

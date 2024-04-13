@@ -7,13 +7,6 @@ def with_lengths(df: DataFrame) -> DataFrame:
     return df.drop(columns=['length'])
 
 
-def convert_length(length: str) -> float:
-    try:
-        return float(str(length)[:-1])
-    except:
-        return 0.0
-
-
 def with_epochs(df: DataFrame) -> DataFrame:
     df[['epoch', 'mya_lower', 'mya_upper']] = df['period'].apply(
         period_data
@@ -21,6 +14,10 @@ def with_epochs(df: DataFrame) -> DataFrame:
     df['mya_lower'] = df['mya_lower'].apply(convert_mya)
     df['mya_upper'] = df['mya_upper'].apply(convert_mya)
     return df.drop(columns=['period'])
+
+
+def taxonomy_lists(df: DataFrame) -> list[list[str]]:
+    return [taxonomy.split() for taxonomy in list(df["taxonomy"])]
 
 
 EPOCH_SET = [
@@ -50,3 +47,11 @@ def convert_mya(mya: str) -> int:
         return int(mya)
     except:
         return 0
+
+
+def convert_length(length: str) -> float:
+    try:
+        return float(str(length)[:-1])
+    except:
+        return 0.0
+
