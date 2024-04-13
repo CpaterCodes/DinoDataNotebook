@@ -1,13 +1,18 @@
 from taxonomy_tree import Clade
 
-def test_clade():
+def test_clade_creation():
     taxonomies = [
         ["Dinosauria", "Saurischia", "Theropoda"],
         ["Dinosauria", "Saurischia", "Sauropodomorpha"],
         ["Dinosauria", "Ornithischia", "Genasauria"]
     ]
 
-    cladogram = Clade.build(taxonomies)
-    assert len(cladogram.members) == 2
-    assert cladogram.members[1].name == "Ornithischia"
-    assert len(cladogram.members[1].members) == 1 
+    dinosauria = Clade.build(taxonomies)
+    assert len(dinosauria.members) == 2
+    assert "Ornithischia" in [clade.name for clade in dinosauria.members]
+    ornithischia: Clade = [
+        clade for clade in dinosauria.members 
+        if clade.name == "Ornithischia"
+    ][0]
+    assert "Genasauria" in [clade.name for clade in ornithischia.members]
+

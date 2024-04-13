@@ -14,26 +14,30 @@ class Clade:
     @staticmethod 
     def clade_set(
         taxonomies: list[list],
-        root_name: Optional[str] = None, 
+        parent_name: Optional[str] = None, 
         index=0
     ) -> list[Clade]:
-        names = []
-        for taxonomy in taxonomies:
-            if index >= len(taxonomy):
-                continue
-            if (
-                taxonomy[index] not in names
-            ) and (
-                root_name in taxonomy or not root_name
-            ):
-                names.append(taxonomy[index])
+        names = list(set([
+            taxonomy[index] 
+            for taxonomy in taxonomies
+            if Clade._safe_index_for(taxonomy, index) 
+            and Clade._child_for(taxonomy, parent_name)
+        ]))
         
-        return [
+        return [ 
             Clade(
                 name=name, 
-                members=Clade.clade_set(
-                    taxonomies, name, index + 1
-                )
+                members=Clade.clade_set(taxonomies, name, index + 1)
             ) for name in names
         ]
-   
+
+    @staticmethod
+    def _child_for(
+        taxonomy: list[str], parent_name: Optional[str]
+    ) -> bool:
+        return parent_name in taxonomy or not parent_name
+
+    @staticmethod
+    def _safe_index_for(taxonomy: list[str], index: int) -> bool:
+        return index < len(taxonomy)
+        
